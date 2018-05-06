@@ -1,0 +1,108 @@
+int buzzer=2;
+int red=3;
+int yellow=4;
+int green=6;
+int echo=7;
+int trig=8;
+int pir=5;
+float duration, distance;
+int val;
+int tempPin = A0;
+void setup() {
+  // put your setup code here, to run once:
+pinMode(buzzer,OUTPUT);
+
+pinMode(red,OUTPUT);
+  pinMode(yellow,OUTPUT);  
+       pinMode(green,OUTPUT);
+
+pinMode(echo,INPUT);
+    pinMode(trig,OUTPUT);
+
+
+pinMode(tempPin,INPUT);
+
+
+Serial.begin(9600);
+//System Check
+ digitalWrite(red,HIGH);
+    delay(1000);
+       digitalWrite(red,LOW);
+           digitalWrite(yellow,HIGH);
+               delay(1000);
+                  digitalWrite(yellow,LOW);
+                     digitalWrite(green,HIGH);
+                        delay(1000);
+                          digitalWrite(green,LOW);
+                               digitalWrite(buzzer,HIGH);
+                                    delay(800);
+                                       digitalWrite(buzzer,LOW);
+                             
+
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+ 
+   val = analogRead(tempPin);
+float mv = ( val/1024.0)*5000; 
+float cel = mv/10;
+float farh = (cel*9)/5 + 32;
+
+Serial.print("TEMPRATURE = ");
+Serial.print(farh);
+Serial.print("*F");
+Serial.println();
+delay(1000);
+  
+
+  digitalWrite(buzzer,LOW);
+   digitalWrite(trig, LOW);  // Added this line
+       delayMicroseconds(2); // Added this line
+            digitalWrite(trig, HIGH);
+               delay(10); // Added this line
+                 digitalWrite(trig, LOW);
+                   duration = pulseIn(echo, HIGH);
+                      distance=duration*340/20000;
+                         Serial.println(distance);
+                         delay(1000);
+                           if(distance>=150)
+                              {
+                                digitalWrite(red,LOW);
+                                  digitalWrite(yellow,LOW);
+                                    digitalWrite(green,HIGH);
+    
+                                       }
+                                           else if(distance<150 && distance>=50)
+                                                {
+                                                    digitalWrite(red,LOW);
+                                                         digitalWrite(yellow,HIGH);
+                                                            digitalWrite(green,LOW);
+                                                                for(int i=0;i<=2;i++)
+                                                                   {
+                                                                     digitalWrite(buzzer,HIGH);
+                                                                     delay(250);
+                                                                     digitalWrite(buzzer,LOW);
+                                                                     delay(20);
+                                                                     }
+                                                }
+                                            else if(distance<50)
+                                            {
+                                         digitalWrite(red,HIGH);
+                                      digitalWrite(yellow,LOW);
+                                    digitalWrite(green,LOW);
+                                  for(int i=0;i<=10;i++)
+                                  {
+                                    digitalWrite(buzzer,HIGH);
+                                    delay(200);
+                                    digitalWrite(buzzer,LOW);
+                                    delay(100);
+                                  }
+                                  }
+                                }
+
+
+
+
+
